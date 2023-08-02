@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>CPS Test</title>
+</head>
+<body>
+  <h1>CPS Test</h1>
+  <p>Click the button below as fast as you can for 10 seconds!</p>
+  <button id="clickButton" onclick="handleClick()">Click me</button>
+  <p id="timer">Time left: 10 seconds</p>
+  <p id="result"></p>
+  <button id="retryButton" onclick="retryTest()" style="display: none;">Retry</button>
+  <script>
+    let clicks = 0;
+    let timer;
+    let timeLeft = 10; 
+    let testStarted = false;
+    function handleClick() {
+      if (!testStarted) {
+        testStarted = true;
+        startTest();
+      }
+      clicks++;
+    }
+    function updateTimer() {
+      document.getElementById("timer").textContent = `Time left: ${timeLeft} seconds`;
+    }
+    function startTest() {
+      clicks = 0;
+      timeLeft = 10;
+      updateTimer();
+      document.getElementById("result").textContent = "";
+      document.getElementById("clickButton").disabled = false;
+      document.getElementById("retryButton").style.display = "none";
+      clearInterval(timer);
+      timer = setInterval(() => {
+        timeLeft--;
+        updateTimer();
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          endTest();
+        }
+      }, 1000); 
+    }
+    function endTest() {
+      document.getElementById("clickButton").disabled = true;
+      const cps = clicks / 10; 
+      document.getElementById("result").textContent = `Clicks per second (CPS): ${cps.toFixed(2)}`;
+      document.getElementById("retryButton").style.display = "block";
+      testStarted = false;
+    }
+    function retryTest() {
+      startTest(); 
+    }
+  </script>
+</body>
+</html>
